@@ -32,7 +32,7 @@ func GetRepo(cfg *configs.DbRedisCfg, log *logrus.Logger) (*Repo, error) {
 }
 
 func (r *Repo) Set(ctx context.Context, key, value string, exp time.Duration) error {
-	messageKey := fmt.Sprintf("%s:message:%d", key, time.Now().Unix())
+	messageKey := fmt.Sprintf("%s:message:%d", key, time.Now().UnixNano()/int64(time.Millisecond))
 
 	err := r.db.Set(ctx, messageKey, value, exp).Err()
 	if err != nil {

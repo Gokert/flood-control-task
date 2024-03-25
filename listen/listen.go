@@ -4,17 +4,19 @@ import (
 	"context"
 	"fmt"
 	"github.com/sirupsen/logrus"
+	"math/rand"
 	"task/configs"
 	"task/usecase"
 	"time"
 )
 
 func ListenAndServ(c usecase.FloodControl, cfg *configs.DbFloodCfg, log *logrus.Logger) error {
-	log.Info(cfg)
+	userId := rand.Int63n(1000)
+
 	for i := 0; i < cfg.CountRequest; i++ {
 		log.Infof("Request number: %d", i)
 
-		result, err := c.Check(context.Background(), cfg.UserId)
+		result, err := c.Check(context.Background(), userId)
 		if err != nil {
 			return fmt.Errorf("listen check error: %s", err.Error())
 		}
