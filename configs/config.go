@@ -1,9 +1,8 @@
 package configs
 
 import (
+	"fmt"
 	"github.com/spf13/viper"
-	"path/filepath"
-	"strings"
 )
 
 type DbRedisCfg struct {
@@ -14,50 +13,42 @@ type DbRedisCfg struct {
 }
 
 type DbFloodCfg struct {
-	TimeDif           int   `yaml:"timeDif"`
-	MaxRequestCurrent int   `yaml:"maxRequestCurrent"`
-	CountRequest      int   `yaml:"countRequest"`
-	UserId            int64 `yaml:"userId"`
-	TimeSleep         int   `yaml:"timeSleep"`
+	TimeDif           float64 `yaml:"timeDif"`
+	MaxRequestCurrent int     `yaml:"maxRequestCurrent"`
+	CountRequest      int     `yaml:"countRequest"`
+	UserId            int64   `yaml:"userId"`
+	TimeSleep         float64 `yaml:"timeSleep"`
 }
 
-func GetRedisConfig(cfgPath string) (*DbRedisCfg, error) {
+func GetRedisConfig() (*DbRedisCfg, error) {
 	v := viper.GetViper()
-	v.SetConfigFile(cfgPath)
-	v.SetConfigType(strings.TrimPrefix(filepath.Ext(cfgPath), "."))
-
-	err := viper.ReadInConfig()
-	if err != nil {
-		return nil, err
-	}
+	v.AutomaticEnv()
 
 	cfg := &DbRedisCfg{
-		Host:     v.GetString("host"),
-		Password: v.GetString("password"),
-		DbNumber: v.GetInt("db"),
-		Timer:    v.GetInt("timer"),
+		Host:     v.GetString("REDIS_ADDR"),
+		Password: v.GetString("REDIS_PASSWORD"),
+		DbNumber: v.GetInt("REDIS_DB"),
+		Timer:    v.GetInt("REDIS_TIMER"),
 	}
+
+	fmt.Println(cfg, "redis")
 
 	return cfg, nil
 }
 
-func GetFloodConfig(cfgPath string) (*DbFloodCfg, error) {
+func GetFloodConfig() (*DbFloodCfg, error) {
 	v := viper.GetViper()
-	v.SetConfigFile(cfgPath)
-	v.SetConfigType(strings.TrimPrefix(filepath.Ext(cfgPath), "."))
-
-	err := viper.ReadInConfig()
-	if err != nil {
-		return nil, err
-	}
+	v.AutomaticEnv()
 
 	cfg := &DbFloodCfg{
-		TimeDif:           v.GetInt("timeDif"),
-		MaxRequestCurrent: v.GetInt("maxRequestCurrent"),
-		CountRequest:      v.GetInt("countRequest"),
-		UserId:            v.GetInt64("userId"),
-		TimeSleep:         v.GetInt("timeSleep"),
+		TimeDif:           v.GetFloat64("FLOOD_TIME_DIF_MIL"),
+		MaxRequestCurrent: v.GetInt("FLOOD_MAX_REQUEST"),
+		CountRequest:      v.GetInt("FLOOD_COUNT_REQUEST"),
+		UserId:            v.GetInt64("FLOOD_USER_ID"),
+		TimeSleep:         v.GetFloat64("FLOOD_TIME_SLEEP_MIL"),
 	}
+
+	fmt.Println(cfg, "flood")
 
 	return cfg, nil
 }

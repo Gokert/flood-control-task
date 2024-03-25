@@ -50,7 +50,7 @@ func (c *Core) Check(ctx context.Context, userID int64) (bool, error) {
 		return false, nil
 	}
 
-	err = c.repo.Set(ctx, strconv.FormatInt(userID, 10), "", time.Duration(c.cfg.TimeDif)*time.Second)
+	err = c.repo.Set(ctx, strconv.FormatInt(userID, 10), "", time.Duration(c.cfg.TimeDif)*time.Millisecond)
 	if err != nil {
 		return false, fmt.Errorf("check set error: %s", err.Error())
 	}

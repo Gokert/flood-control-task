@@ -10,13 +10,13 @@ import (
 func main() {
 	log := logger.GetLogger()
 
-	redisCfg, err := configs.GetRedisConfig("configs/redis_db.yaml")
+	redisCfg, err := configs.GetRedisConfig()
 	if err != nil {
 		log.Error("Create redis config error: ", err)
 		return
 	}
 
-	floodCfg, err := configs.GetFloodConfig("configs/flood_config.yaml")
+	floodCfg, err := configs.GetFloodConfig()
 	if err != nil {
 		log.Error("Create flood config error: ", err)
 		return
